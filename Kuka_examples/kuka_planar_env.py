@@ -24,17 +24,17 @@ class KukaPlanarEnv(gym.Env):
         # Example for using image as input:
         self.observation_space = gym.spaces.Box(low=-float("inf"), high=float("inf"), shape=(6,))
         print(self.observation_space)
-        
+
         self._renders = renders
         self._physics_client_id = -1
 
         self._p = None
         self.state = None
         self.kuka = None
-        self.dt = 1e-2 
+        self.dt = 1e-2
         self.N = N
         self.n_step = 0
-        self.iiwa_urdf = "/home/zhigen/code/manipulation-learning/examples/kuka_planar/kuka_models/model_planar.urdf"
+        self.iiwa_urdf = "/home/zzhao300/code/manipulation-learning/examples/kuka_planar/kuka_models/model_planar.urdf"
 
         self.active_joint_idx = [1, 3, 5]
         self.q_goal = q_goal
@@ -47,7 +47,7 @@ class KukaPlanarEnv(gym.Env):
     def step(self, action):
         # Execute one time step within the environment
         q, vq = self._pinocchio_fd(action)
-        
+
         # self._p.setJointMotorControlArray(
         #     bodyUniqueId = self.kuka,
         #     jointIndices = self.active_joint_idx,
@@ -90,9 +90,9 @@ class KukaPlanarEnv(gym.Env):
             if self._renders:
                 self._p = bullet_client.BulletClient(pybullet.GUI)
                 self._p.resetDebugVisualizerCamera(
-                    cameraDistance=2.5, 
-                    cameraYaw=30, 
-                    cameraPitch=-45, 
+                    cameraDistance=2.5,
+                    cameraYaw=30,
+                    cameraPitch=-45,
                     cameraTargetPosition=[0,0,0.25])
             else:
                 self._p = bullet_client.BulletClient()
@@ -116,7 +116,7 @@ class KukaPlanarEnv(gym.Env):
 
         for i in range(self.num_joints):
             self._p.resetJointState(self.kuka, i, x_goal[i], x_goal[i+7])
-        
+
         # FK to compute "desired EE coordinate"
         link_state = self._p.getLinkState(
             bodyUniqueId = self.kuka,
@@ -134,7 +134,7 @@ class KukaPlanarEnv(gym.Env):
 
         for i in range(self.num_joints):
             self._p.resetJointState(self.kuka, i, state[i], state[i+7])
-        
+
         self.state = self._get_state()
 
         return self.state
@@ -145,14 +145,14 @@ class KukaPlanarEnv(gym.Env):
         for i in self.active_joint_idx:
             pos.append(self._p.getJointState(self.kuka, i)[0])
             vel.append(self._p.getJointState(self.kuka, i)[1])
-        
+
         state = pos+vel
         return state
-    
+
     def _sample_kuka_planar_pos(self, sigma=np.pi):
         rnd = (np.random.random_sample((3,))-0.5)*2 # [-1, 1)
         return rnd*sigma
-    
+
     def _pinocchio_fd(self, action):
         num_active_joints = len(self.active_joint_idx)
         q = np.array(self.state[:num_active_joints]).reshape((-1, 1))

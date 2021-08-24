@@ -29,7 +29,7 @@ def main():
 
     print(f"mean_reward:{mean_reward:.2f} +/- {std_reward:.2f}")
 
-    total_timesteps=1e7
+    total_timesteps=int(1e8)
     model.learn(total_timesteps=total_timesteps, callback=callback)
     mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=100)
     print(f"mean_reward:{mean_reward:.2f} +/- {std_reward:.2f}")
