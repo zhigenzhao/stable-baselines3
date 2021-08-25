@@ -5,7 +5,7 @@ from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3 import PPO
 
 def main():
-    model_filename = "/home/zhigen/code/stable-baselines3/Kuka_examples/saved_models/PPO_Kuka10000000.zip"
+    model_filename = "/home/zhigen/code/stable-baselines3/Kuka_examples/saved_models/best_model.zip"
     model = PPO.load(model_filename)
 
     env = KukaPlanarEnv(q_goal=np.array([1, -1, -1]), N=300, renders=True)

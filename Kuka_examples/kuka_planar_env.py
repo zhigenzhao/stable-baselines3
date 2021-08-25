@@ -34,7 +34,7 @@ class KukaPlanarEnv(gym.Env):
         self.dt = 1e-2
         self.N = N
         self.n_step = 0
-        self.iiwa_urdf = "/home/zzhao300/code/manipulation-learning/examples/kuka_planar/kuka_models/model_planar.urdf"
+        self.iiwa_urdf = "/home/zhigen/code/manipulation-learning/examples/kuka_planar/kuka_models/model_planar.urdf"
 
         self.active_joint_idx = [1, 3, 5]
         self.q_goal = q_goal
@@ -175,16 +175,16 @@ class KukaPlanarEnv(gym.Env):
             l(x, u) = (x-x_ref)'W(x-x_ref)
         """
         x_ref = np.append(q_goal, [0]*3)
-        W = np.array([1]*6)
+        W = np.array([1000]*6)
         goal_tracking_cost = np.dot(W, (x-x_ref)**2).item()
 
         Q = np.array([1e-2]*3+[1e-1]*3)
         x_reg_cost = np.dot(Q, x**2).item()
 
-        R = np.array([1e-5]*3)
+        R = np.array([1e-2]*3)
         u_reg_cost = np.dot(R, u**2).item()
 
-        return goal_tracking_cost+u_reg_cost+x_reg_cost
+        return (goal_tracking_cost+u_reg_cost+x_reg_cost)/1e3
 
     def render(self, mode='human', close=False):
         # Render the environment to the screen
