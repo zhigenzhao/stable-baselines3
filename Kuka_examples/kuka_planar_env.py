@@ -34,7 +34,7 @@ class KukaPlanarEnv(gym.Env):
         self.dt = 1e-2
         self.N = N
         self.n_step = 0
-        self.iiwa_urdf = "/home/zhigen/code/manipulation-learning/examples/kuka_planar/kuka_models/model_planar.urdf"
+        self.iiwa_urdf = "/home/zzhao300/code/manipulation-learning/examples/kuka_planar/kuka_models/model_planar.urdf"
 
         self.active_joint_idx = [1, 3, 5]
         self.q_goal = q_goal

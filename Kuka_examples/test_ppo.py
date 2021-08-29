@@ -24,12 +24,12 @@ def main():
 
     callback = SaveOnBestTrainingRewardCallback(check_freq=1000, log_dir=log_dir)
 
-    model = PPO(MlpPolicy, env, verbose=1, gamma=0.9999)
+    model = PPO(MlpPolicy, env, verbose=1, batch_size=64,gae_lambda=0.98,gamma=0.999, ent_coef=0.0001, learning_rate=1e-4)
     mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=100)
 
     print(f"mean_reward:{mean_reward:.2f} +/- {std_reward:.2f}")
 
-    total_timesteps=int(1e8)
+    total_timesteps=int(2e7)
     model.learn(total_timesteps=total_timesteps, callback=callback)
     mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=100)
     print(f"mean_reward:{mean_reward:.2f} +/- {std_reward:.2f}")
